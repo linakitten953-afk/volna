@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Обо мне — веб-дизайнер и верстальщик, портфолио</title>
+  <meta name="description" content="Обо мне: веб-дизайнер и верстальщик. Мои проекты, навыки и ссылка на GitHub.">
+  <meta name="keywords" content="веб-дизайнер, верстальщик, портфолио, github, дизайн сайтов">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="http://volna.l9137573.beget.tech/volna/about.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Обо мне — веб-дизайнер и верстальщик, портфолио">
+  <meta property="og:description" content="Обо мне: веб-дизайнер и верстальщик. Мои проекты, навыки и ссылка на GitHub.">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-58QCVPH7');</script>
+  <!-- End Google Tag Manager -->
+
+  <!-- Yandex.Metrika counter -->
+  <script type="text/javascript">
+      (function(m,e,t,r,i,k,a){
+          m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+          m[i].l=1*new Date();
+          for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+          k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+      })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=113741411', 'ym');
+
+      ym(113741411, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/113741411" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  <!-- /Yandex.Metrika counter -->
+</head>
+<body class="land-page">
+  <!-- GTM (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-58QCVPH7"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End GTM (noscript) -->
+
+  <!-- Класс sunset делает закатное небо, чтобы отличалось от других страниц -->
+  <header class="sky small sunset">
+    <div class="stars"></div>
+    <span class="cloud c1"></span><span class="cloud c2"></span>
+    <div class="sun"></div>
+    <img class="gull g1" src="img/gull.svg" alt="" width="50" height="26">
+    <img class="gull g2" src="img/gull.svg" alt="" width="50" height="26">
+    <img class="gull g3" src="img/gull.svg" alt="" width="50" height="26">
+    <img class="gull g4" src="img/gull.svg" alt="" width="50" height="26">
+    
+    <nav aria-label="Основное меню">
+      <a class="logo" href="index.html">⚓ «Волна»</a>
+      <a href="routes.html">Маршруты</a>
+      <a href="fleet.html">Флот</a>
+      <a href="tickets.html">Билеты</a>
+      <a href="partners.html">Партнёры</a>
+      <a href="about.html" class="active">Обо мне</a>
+      <a href="contacts.html">Контакты</a>
+    </nav>
+    <div class="hero">
+      <h1>Обо мне</h1>
+      <p>Рисую, придумываю и собираю дизайн. Вечер на берегу, коктейль и много идей.</p>
+    </div>
+    <div class="wave back"></div>
+    <!-- Три теплохода плывут по закатному морю -->
+    <div class="fleet-ship fs1"><img src="img/ship.svg" alt="Теплоход «Лазурный»" width="300" height="190"></div>
+    <div class="fleet-ship fs2"><img src="img/ship.svg" alt="Теплоход «Жемчужина»" width="300" height="190"></div>
+    <div class="fleet-ship fs3"><img src="img/ship.svg" alt="Теплоход «Ракушка»" width="300" height="190"></div>
+    <div class="wave front"></div>
+  </header>
+
+  <div class="land">
+    <main class="about-main">
+      <!-- Скрытые чекбоксы для переключения погоды. Они невидимы на экране, но работают как кнопки в CSS -->
+      <input type="checkbox" id="t-day" class="toggle" aria-label="День или ночь">
+      <input type="checkbox" id="t-wind" class="toggle" aria-label="Ветер">
+      <input type="radio" name="weather" id="w-clear" class="toggle" aria-label="Ясно">
+      <input type="radio" name="weather" id="w-rain" class="toggle" checked aria-label="Дождь">
+      <input type="radio" name="weather" id="w-snow" class="toggle" aria-label="Снег">
+      <input type="checkbox" id="t-book" class="toggle" aria-label="Открыть книгу с проектами">
+
+      <section class="window-section">
+        <h2>Обо мне</h2>
+        <p class="lead">Дизайнер и художник по душе. Посмотрите в окно: вот как я вижу вечер в Японии.</p>
+
+        <!-- Кнопки управления погодой. Они привязаны к чекбоксам выше через атрибут for -->
+        <div class="scene-controls">
+          <label for="t-day" class="ctl ctl-day"><span class="s-night">🌙 Ночь</span><span class="s-day">☀️ День</span></label>
+          <label for="w-rain" class="ctl wl wl-clear">🌤️ Ясно</label>
+          <label for="w-snow" class="ctl wl wl-rain">🌧️ Дождь</label>
+          <label for="w-clear" class="ctl wl wl-snow">❄️ Снег</label>
+          <label for="t-wind" class="ctl ctl-wind"><span class="s-calm">🍃 Штиль</span><span class="s-wind">🌬️ Ветер</span></label>
+        </div>
+
+        <!-- Окно, в котором происходит вся магия -->
+        <div class="stage">
+          <div class="frame">
+            <div class="scene" role="img" aria-label="Серый котёнок гуляет по японской улице, вокруг цветёт сакура. Погоду и время суток можно менять кнопками">
+            <div class="night-stars"></div>
+            <div class="orb"></div>
+            <div class="fuji"></div>
+            <div class="hills"></div>
+
+            <!-- Домики. Тег i используется для окон -->
+            <div class="house h1"><i></i><i></i><i></i><i></i></div>
+            <div class="house h2"><i></i><i></i><i></i><i></i></div>
+            <div class="house h3"><i></i><i></i><i></i><i></i></div>
+            <div class="house h4"><i></i><i></i><i></i><i></i></div>
+            <div class="house h5"><i></i><i></i><i></i><i></i></div>
+
+            <!-- Ворота Тории -->
+            <div class="torii"><i class="kasagi"></i><i class="nuki"></i><i class="pl"></i><i class="pr"></i></div>
+
+            <!-- Фонарики -->
+            <div class="lanterns"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+            <!-- Деревья сакуры -->
+            <div class="tree t-left"><div class="crown"></div></div>
+            <div class="tree t-right"><div class="crown"></div></div>
+
+            <!-- Земля, дорожка, лужи, сугробы -->
+            <div class="ground"><span class="puddle p1"></span><span class="puddle p2"></span><span class="puddle p3"></span></div>
+            <div class="path"></div>
+            <div class="drifts"></div>
+
+            <!-- Котенок в SVG. Здесь мы вырезаем его картинку и анимируем части отдельно -->
+            <div class="kitten">
+              <svg viewBox="0 0 140 112" width="150" height="120" aria-hidden="true">
+                <!-- Зонтик, который появляется только в дождь -->
+                <g class="umbrella">
+                  <path d="M70 58 V30" stroke="#5b3a29" stroke-width="3" stroke-linecap="round" fill="none"/>
+                  <path d="M30 32 Q70 -12 110 32 Q100 26 90 32 Q80 26 70 32 Q60 26 50 32 Q40 26 30 32Z" fill="#d1432f"/>
+                  <path d="M70 10 Q58 18 50 32 M70 10 Q82 18 90 32" stroke="#fff" stroke-width="2" fill="none" opacity="0.6"/>
+                </g>
+                
+                <!-- Хвост -->
+                <path class="tail" d="M32 76 Q8 74 10 52 Q11 44 18 46" stroke="#a7b0ba" stroke-width="8" stroke-linecap="round" fill="none"/>
+                
+                <!-- Лапы. Рисуем их до тела, чтобы верх лап был спрятан под туловищем -->
+                <rect class="leg lb" x="46" y="80" width="8" height="26" rx="4" fill="#8b95a0"/>
+                <rect class="leg lf" x="78" y="80" width="8" height="26" rx="4" fill="#8b95a0"/>
+                <rect class="leg rb" x="34" y="80" width="8" height="26" rx="4" fill="#a7b0ba"/>
+                <rect class="leg rf" x="68" y="80" width="8" height="26" rx="4" fill="#a7b0ba"/>
+                
+                <!-- Туловище и полоски -->
+                <ellipse cx="58" cy="76" rx="32" ry="18" fill="#a7b0ba"/>
+                <path d="M44 60 q4 9 0 17 M58 59 q4 9 0 18 M72 60 q4 9 0 17" stroke="#7b8590" stroke-width="3" stroke-linecap="round" fill="none"/>
+                
+                <!-- Шарф. Вставляем его между телом и головой, чтобы голова перекрыла его сверху и он казался на шее -->
+                <g class="scarf">
+                  <!-- Развевающиеся концы -->
+                  <g class="tail-top">
+                    <path d="M80 71 Q60 60 40 65 L43 72 Q63 68 81 75 Z" fill="#b9a2e8"/>
+                    <path d="M78 73 Q60 62 42 67" stroke="#ffc2e0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  </g>
+                  <g class="tail-bottom">
+                    <path d="M81 74 Q60 85 40 100 L45 105 Q63 92 83 77 Z" fill="#ffc2e0"/>
+                    <path d="M79 76 Q60 88 43 102" stroke="#b9a2e8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  </g>
+                  <!-- Вертикальный воротник -->
+                  <path d="M78 69 Q85 73 89 79 L82 84 Q78 78 74 74 Z" fill="#b9a2e8"/>
+                  <path d="M79 72 Q84 76 86 79" stroke="#ffc2e0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <circle cx="78" cy="73" r="4" fill="#b9a2e8"/>
+                  <circle cx="78" cy="73" r="1.5" fill="#ffc2e0"/>
+                </g>
+
+                <!-- Голова, уши, мордочка -->
+                <polygon points="85,52 87,35 99,47" fill="#a7b0ba"/><polygon points="100,47 112,36 114,54" fill="#a7b0ba"/>
+                <polygon points="88,48 89,40 95,46" fill="#f0b5bb"/><polygon points="104,46 110,40 111,50" fill="#f0b5bb"/>
+                <circle cx="98" cy="64" r="17" fill="#a7b0ba"/>
+                <path d="M94 50 v5 M98 49 v6 M102 50 v5" stroke="#7b8590" stroke-width="2" stroke-linecap="round"/>
+                <ellipse cx="100" cy="62" rx="2.8" ry="3.5" fill="#e6c34e"/><ellipse cx="110" cy="62" rx="2.8" ry="3.5" fill="#e6c34e"/>
+                <ellipse cx="100.4" cy="62" rx="1" ry="2.8" fill="#16110d"/><ellipse cx="110.4" cy="62" rx="1" ry="2.8" fill="#16110d"/>
+                <polygon points="107,66 113,66 110,70" fill="#e0788a"/>
+                <path d="M110 70 q-3 3 -6 1 M110 70 q3 3 6 1" stroke="#5c6670" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                <path d="M114 68 L130 63 M114 71 L130 73" stroke="#fff" stroke-width="1" opacity="0.8"/>
+              </svg>
+            </div>
+
+            <!-- Погодные слои, которые включаются через CSS :checked -->
+            <div class="petals"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="snow"></div>
+            <div class="shade"></div>
+            <div class="rain"></div>
+            <div class="gusts"><i></i><i></i><i></i></div>
+          </div>
+          </div>
+          <div class="sill"></div>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <h2>Чем я занимаюсь</h2>
+        <div class="about-grid">
+          <article class="panel">
+            <h3>Люблю дизайн</h3>
+            <p>Мне нравится заниматься дизайном: подбирать цвета, придумывать настроение и рисовать то, чего ещё нет. Для сайта «Волна» родилась идея: чем ниже листаешь, тем глубже погружаешься.</p>
+          </article>
+          <article class="panel">
+            <h3>Как я работаю</h3>
+            <ol class="how">
+              <li>Придумываю идею и настроение.</li>
+              <li>Рисую эскизы, подбираю палитру.</li>
+              <li>Собираю дизайн-макет.</li>
+              <li>Оживляю вместе с ИИ-помощником и слежу, чтобы вышло так, как задумано.</li>
+            </ol>
+          </article>
+          <article class="panel">
+            <h3>Что умею</h3>
+            <ul class="chips">
+              <li>Дизайн-макеты</li><li>Цвет и палитры</li><li>Композиция</li><li>Иллюстрации</li><li>SVG-рисунки</li><li>Персонажи</li><li>Идеи для анимации</li><li>Работа с референсами</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="terrace">
+        <h2>Мои проекты</h2>
+        <div class="panel terrace-panel">
+          <div class="terrace-text">
+            <p>Вечер на берегу, коктейль и книга, в которой собраны мои работы. Откройте её: внутри ссылка на мой GitHub.</p>
+            <p class="hint">Нажмите на книгу 📖</p>
+          </div>
+          <!-- Стол с коктейлем и книгой. Книга - это label, который при клике активирует чекбокс t-book и открывает модалку -->
+          <div class="table-scene">
+            <svg class="table" viewBox="0 0 300 260" aria-hidden="true">
+              <defs><linearGradient id="drink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a5c"/><stop offset="1" stop-color="#ff4f7b"/></linearGradient></defs>
+              <ellipse cx="150" cy="238" rx="58" ry="12" fill="#4a3320"/>
+              <rect x="141" y="168" width="18" height="70" fill="#6b4a2e"/>
+              <ellipse cx="150" cy="166" rx="124" ry="28" fill="#5c3d25"/>
+              <ellipse cx="150" cy="158" rx="124" ry="28" fill="#8a5a35"/>
+              <ellipse cx="150" cy="158" rx="106" ry="22" fill="none" stroke="#a9744a" stroke-width="2" opacity="0.7"/>
+              <defs><clipPath id="gc"><path d="M216 78 H256 L246 148 H226 Z"/></clipPath></defs>
+              <ellipse cx="236" cy="152" rx="16" ry="4" fill="rgba(255,255,255,0.35)"/>
+              <path d="M214 74 H258 L247 150 H225 Z" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.75)" stroke-width="2"/>
+              <g clip-path="url(#gc)">
+                <g class="liquid">
+                  <path d="M200 94 H272 V160 H200 Z" fill="url(#drink)"/>
+                  <rect class="ice" x="226" y="108" width="9" height="9" rx="2" fill="rgba(255,255,255,0.55)"/>
+                  <rect class="ice i2" x="238" y="122" width="9" height="9" rx="2" fill="rgba(255,255,255,0.5)"/>
+                  <circle class="cbub b1" cx="232" cy="140" r="2" fill="#fff"/><circle class="cbub b2" cx="241" cy="138" r="1.6" fill="#fff"/><circle class="cbub b3" cx="236" cy="142" r="1.3" fill="#fff"/>
+                </g>
+              </g>
+              <path d="M220 82 L227 138" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+              <g class="stir">
+                <path d="M240 56 L236 142" stroke="#fff" stroke-width="3"/><path d="M240 56 L236 142" stroke="#e63946" stroke-width="3" stroke-dasharray="6 6"/>
+                <path d="M229 62 Q240 46 251 62 Q245 58 240 62 Q235 58 229 62Z" fill="#c78cff"/>
+              </g>
+              <circle cx="258" cy="78" r="11" fill="#ffb347"/><circle cx="258" cy="78" r="8" fill="none" stroke="#fff3d6" stroke-width="1.5"/><path d="M258 70 V86 M250 78 H266" stroke="#fff3d6" stroke-width="1.2"/>
+            </svg>
+            <label for="t-book" class="book" title="Открыть книгу">
+              <span class="book-title">Мои проекты</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Модальное окно с ссылкой на GitHub -->
+      <div class="modal" role="dialog" aria-label="Мои проекты">
+        <label for="t-book" class="modal-bg" aria-hidden="true"></label>
+        <div class="modal-box">
+          <h3>Мои проекты</h3>
+          <p>Все работы и исходный код я храню на GitHub.</p>
+          <div class="cta">
+            <a class="btn github" href="https://github.com/ВАШ-НИК" target="_blank" rel="noopener">GitHub</a>
+            <a class="btn gold" href="partners.html">Портфолио сайтов</a>
+          </div>
+          <label for="t-book" class="modal-close">Закрыть</label>
+        </div>
+      </div>
+    </main>
+
+    <footer class="seabed">
+      <div class="panel"><p>© 2026 Речное пароходство «Волна». Билеты на теплоход, речные круизы и городские рейсы. Касса: ежедневно с 9:00 до 20:00. Тел. <a href="tel:+78005550123">+7 (800) 555-01-23</a></p></div>
+      <div class="sand" aria-hidden="true">
+        <img class="weed w1" src="img/weed.svg" alt="" width="34" height="150" loading="lazy">
+        <img class="weed w2" src="img/weed.svg" alt="" width="34" height="150" loading="lazy">
+        <img class="weed w3" src="img/weed.svg" alt="" width="34" height="150" loading="lazy">
+        <img class="weed w4" src="img/weed.svg" alt="" width="34" height="150" loading="lazy">
+        <img class="weed w5" src="img/weed.svg" alt="" width="34" height="150" loading="lazy">
+        <img class="shell s1" src="img/shell.svg" alt="" width="80" height="70" loading="lazy">
+        <img class="shell s2" src="img/shell.svg" alt="" width="80" height="70" loading="lazy">
+        <img class="shell s3" src="img/shell.svg" alt="" width="80" height="70" loading="lazy">
+        <img class="turtle" src="img/turtle.svg" alt="" width="120" height="70" loading="lazy">
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

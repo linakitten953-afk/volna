@@ -1,0 +1,621 @@
+/* Базовые цвета и настройки для всего сайта */
+:root {
+  --sky-day: #bfeaff;
+  --deep: #06304a;
+  --gold: #ffc94d;
+  --coral: #ff7a59;
+  --panel: rgba(255, 255, 255, 0.92);
+  --ink: #06304a;
+  --line: rgba(6, 48, 74, 0.15);
+  --head: "Comfortaa", "Trebuchet MS", sans-serif;
+  --body: "Nunito", "Segoe UI", Arial, sans-serif;
+}
+
+/* Сброс стандартных отступов и ползунков, чтобы верстка не ехала */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; } /* Плавный скролл по якорям */
+body { 
+  margin: 0; 
+  font-family: var(--body); 
+  font-size: 17px; 
+  line-height: 1.6; 
+  color: var(--ink); 
+  overflow-x: hidden; /* Запрещаем горизонтальный скролл, чтоб не было белых полос */
+  background-color: #021a2b;
+}
+
+h1, h2, h3 { font-family: var(--head); line-height: 1.2; margin: 0 0 0.5em; }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; height: auto; display: block; }
+
+/* Красивая обводка для тех, кто ходит по сайту клавишей Tab */
+a:focus-visible, summary:focus-visible, input:focus-visible, select:focus-visible, button:focus-visible { 
+  outline: 3px solid var(--gold); outline-offset: 3px; 
+}
+
+/* Настройки для анимации смены неба (день-ночь) */
+:root { --cycle: 60s; } /* Время полного цикла */
+
+/* @property нужна, чтобы браузер понимал, что это цвета. Без нее градиент неба не будет плавно перетекать */
+@property --sky-top { syntax: "<color>"; inherits: true; initial-value: #6cc4f5; }
+@property --sky-mid { syntax: "<color>"; inherits: true; initial-value: #9bd8f8; }
+@property --sky-bot { syntax: "<color>"; inherits: true; initial-value: #bfeaff; }
+
+/* Сама шапка сайта, где меняется небо */
+.sky {
+  position: relative;
+  z-index: 2;
+  height: min(88vh, 640px);
+  min-height: 480px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--sky-top), var(--sky-mid) 50%, var(--sky-bot) 90%);
+  animation: skyCycle var(--cycle) ease-in-out infinite;
+}
+/* На внутренних страницах небо делаем пониже */
+.sky.small { height: 350px; min-height: 350px; }
+
+/* Ключевые кадры смены неба. Проценты — это время. */
+@keyframes skyCycle {
+  0%, 14% { --sky-top: #6cc4f5; --sky-mid: #9bd8f8; --sky-bot: #bfeaff; }
+  28%     { --sky-top: #ffb7b2; --sky-mid: #e2a9ce; --sky-bot: #a2c2e8; }
+  40%, 60% { --sky-top: #0b1a2a; --sky-mid: #12293f; --sky-bot: #1a3b5c; }
+  74%     { --sky-top: #ffd6a5; --sky-mid: #fdffb6; --sky-bot: #caffbf; }
+  88%, 100% { --sky-top: #6cc4f5; --sky-mid: #9bd8f8; --sky-bot: #bfeaff; }
+}
+
+/* Солнце: плавно опускается и уходит за горизонт */
+.sun {
+  position: absolute; right: 10%; top: 15%; width: 90px; height: 90px; border-radius: 50%;
+  background: radial-gradient(circle, #fff6c2 40%, #ffe27a 70%);
+  box-shadow: 0 0 60px 20px rgba(255, 235, 150, 0.7);
+  animation: sunCycle var(--cycle) ease-in-out infinite;
+}
+@keyframes sunCycle {
+  0%, 12% { transform: translate(0, 0); opacity: 1; }
+  22%     { opacity: 0.8; }
+  30%     { transform: translate(-40px, 230px); opacity: 0; } /* Спряталось */
+  76%     { transform: translate(40px, 230px); opacity: 0; }
+  90%, 100% { transform: translate(0, 0); opacity: 1; } /* Утром вернулось */
+}
+
+/* Луна: рисуем через псевдоэлемент ::after, чтобы не захламлять HTML лишними дивами */
+.sky::after {
+  content: ""; position: absolute; right: 10%; top: 15%; width: 80px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fdfdfd, #b0b0b0);
+  box-shadow: 0 0 40px 10px rgba(255, 255, 255, 0.4);
+  opacity: 0; animation: moonCycle var(--cycle) ease-in-out infinite;
+}
+@keyframes moonCycle {
+  0%, 34% { transform: translate(0, 230px); opacity: 0; }
+  46%, 58% { transform: translate(0, 0); opacity: 1; } /* Висит ночью */
+  70%, 100% { transform: translate(0, 230px); opacity: 0; }
+}
+
+/* Звезды на фоне. Сделаны через радиальные градиенты, чтобы не плодить кучу тегов span */
+.stars {
+  position: absolute; inset: 0; opacity: 0; pointer-events: none;
+  animation: starsCycle var(--cycle) ease-in-out infinite, twinkle 2s ease-in-out infinite alternate;
+  background-image:
+    radial-gradient(2px 2px at 10% 20%, #fff, transparent),
+    radial-gradient(2px 2px at 30% 50%, #fff, transparent),
+    radial-gradient(1px 1px at 50% 10%, #fff, transparent),
+    radial-gradient(2px 2px at 70% 80%, #fff, transparent),
+    radial-gradient(1px 1px at 90% 30%, #fff, transparent),
+    radial-gradient(2px 2px at 15% 70%, #fff, transparent),
+    radial-gradient(1px 1px at 45% 90%, #fff, transparent),
+    radial-gradient(2px 2px at 85% 50%, #fff, transparent),
+    radial-gradient(1px 1px at 25% 30%, #fff, transparent),
+    radial-gradient(2px 2px at 65% 20%, #fff, transparent);
+}
+@keyframes starsCycle { 0%, 30% { opacity: 0; } 42%, 58% { opacity: 1; } 70%, 100% { opacity: 0; } }
+@keyframes twinkle { from { filter: brightness(0.5); } to { filter: brightness(1); } }
+
+/* Облака: плывут слева направо, ночью темнеют */
+.cloud { position: absolute; width: 130px; height: 38px; background: #fff; border-radius: 40px; opacity: 0.85; animation: cloud 70s linear infinite, cloudTone var(--cycle) ease-in-out infinite; }
+.cloud::before, .cloud::after { content: ""; position: absolute; background: #fff; border-radius: 50%; }
+.cloud::before { width: 54px; height: 54px; left: 20px; top: -26px; }
+.cloud::after { width: 40px; height: 40px; left: 64px; top: -18px; }
+.cloud.c1 { top: 24%; left: -150px; }
+.cloud.c2 { top: 40%; left: -150px; animation-duration: 95s, var(--cycle); animation-delay: -40s, 0s; transform: scale(0.7); }
+@keyframes cloud { to { left: 110%; } }
+@keyframes cloudTone {
+  0%, 14% { filter: brightness(1); }
+  28%     { filter: brightness(0.95); }
+  40%, 60% { filter: brightness(0.35); }
+  74%     { filter: brightness(0.95); }
+  88%, 100% { filter: brightness(1); }
+}
+
+/* Чайки летают туда-сюда и покачиваются */
+.gull {
+  position: absolute; z-index: 2; left: 0; width: var(--w, 50px); pointer-events: none;
+  animation: gullFly var(--d, 24s) linear var(--s, 0s) infinite, gullBob 3s ease-in-out infinite, gullCycle var(--cycle) ease-in-out infinite;
+}
+@keyframes gullFly { from { transform: translateX(-12vw); } to { transform: translateX(112vw); } }
+@keyframes gullFlyBack { from { transform: translateX(112vw); } to { transform: translateX(-12vw); } }
+@keyframes gullBob { 50% { translate: 0 -14px; } }
+@keyframes gullCycle { 0%, 22% { opacity: 1; } 34%, 70% { opacity: 0; } 82%, 100% { opacity: 1; } }
+.gull.g1 { top: 16%; --d: 24s; --s: -3s;  --w: 96px; --x: 12%; }
+.gull.g2 { top: 28%; --d: 32s; --s: -15s; --w: 70px; --x: 60%; }
+.gull.g3 { top: 10%; --d: 20s; --s: -9s;  --w: 56px; --x: 82%; }
+.gull.g4 { top: 36%; --d: 28s; --s: -21s; --w: 80px; --x: 35%; }
+/* Четные чайки летят в обратную сторону */
+.gull.g2, .gull.g4 { animation-name: gullFlyBack, gullBob, gullCycle; }
+
+/* Навигация и главный экран */
+nav { position: relative; z-index: 6; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; padding: 16px 5%; }
+nav .logo { font-family: var(--head); font-weight: 700; font-size: 1.4rem; margin-right: auto; color: #fff; text-shadow: 0 0 10px rgba(6,48,74,0.55), 0 1px 3px rgba(6,48,74,0.5); }
+nav a:not(.logo) { font-weight: 600; padding: 4px 2px; border-bottom: 2px solid transparent; transition: border-color 0.2s; color: #fff; text-shadow: 0 0 10px rgba(6,48,74,0.55), 0 1px 3px rgba(6,48,74,0.5); }
+nav a:not(.logo):hover, nav a.active { border-color: #fff; }
+
+/* Главный текст на фоне неба */
+.hero { position: relative; z-index: 6; padding: 2vh 5% 0; max-width: 660px; }
+.hero h1 { font-size: clamp(1.8rem, 7vw, 3.4rem); color: #fff; text-shadow: 0 0 14px rgba(6,48,74,0.6), 0 2px 4px rgba(6,48,74,0.5); }
+.hero p { max-width: 36ch; font-size: 1.1rem; color: #fff; text-shadow: 0 0 14px rgba(6,48,74,0.6), 0 2px 4px rgba(6,48,74,0.5); }
+
+/* Кнопки */
+.btn { display: inline-block; background: var(--deep); color: #fff; border: 0; border-radius: 999px; padding: 12px 28px; font: 700 1rem var(--body); cursor: pointer; transition: transform 0.2s, background 0.2s, box-shadow 0.2s; }
+.btn:hover { background: #0b5a7e; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+.btn.gold { background: var(--gold); color: #06304a; }
+.btn.gold:hover { background: #ffd877; }
+
+/* Кораблик: выплывает, стоит, уплывает */
+.ship { position: absolute; z-index: 4; bottom: -14px; left: -30%; width: clamp(220px, 40vw, 380px); animation: sail 15s linear infinite; }
+.ship img { display: block; width: 100%; transform-origin: 50% 90%; animation: rock 3s ease-in-out infinite; }
+@keyframes sail {
+  0% { left: -30%; opacity: 1; }
+  20% { left: 30%; } /* Доплыл до центра */
+  70% { left: 30%; opacity: 1; }
+  90% { left: 110%; opacity: 0; } /* Уплыл */
+  100% { left: 110%; opacity: 0; }
+}
+@keyframes rock { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg) translateY(5px); } }
+
+/* Волны двигаются за счет сдвига фоновой картинки */
+.wave { position: absolute; left: 0; right: 0; bottom: 0; background-repeat: repeat-x; background-position: 0 100%; }
+.wave.back { z-index: 3; height: 100px; background-image: url("img/wave-back.svg"); background-size: 600px 100px; animation: wave 16s linear infinite reverse; }
+.wave.front { z-index: 5; height: 80px; background-image: url("img/wave-front.svg"); background-size: 600px 80px; animation: wave 9s linear infinite; }
+@keyframes wave { to { background-position: 600px 100%; } }
+
+/* Основной контент: подводный мир и карточки */
+.sea { position: relative; background: linear-gradient(180deg, #4fc3e0 0%, #2aa3c9 15%, #1b7fa8 40%, #0f5b82 70%, #073a58 90%, #021a2b 100%); }
+.sea::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 700px; z-index: 0; pointer-events: none; background: repeating-linear-gradient(105deg, rgba(255,255,255,0.15) 0 40px, transparent 40px 140px); -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); animation: rays 8s ease-in-out infinite; }
+@keyframes rays { 50% { opacity: 0.5; } }
+.sea::after { content: ""; position: absolute; left: 6px; top: 0; bottom: 0; width: 12px; z-index: 1; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.55) 0 2px, transparent 2px 60px); }
+
+/* Пузырьки: всплывают снизу вверх */
+.bubbles { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.bubbles i { position: absolute; bottom: -30px; border: 2px solid rgba(255,255,255,0.55); border-radius: 50%; animation: rise 12s linear infinite; }
+.bubbles i:nth-child(1) { left: 8%; width: 14px; height: 14px; animation-delay: 0s; }
+.bubbles i:nth-child(2) { left: 22%; width: 22px; height: 22px; animation-delay: -3s; animation-duration: 15s; }
+.bubbles i:nth-child(3) { left: 38%; width: 10px; height: 10px; animation-delay: -6s; }
+.bubbles i:nth-child(4) { left: 55%; width: 18px; height: 18px; animation-delay: -9s; animation-duration: 14s; }
+.bubbles i:nth-child(5) { left: 70%; width: 12px; height: 12px; animation-delay: -2s; }
+.bubbles i:nth-child(6) { left: 84%; width: 24px; height: 24px; animation-delay: -7s; animation-duration: 17s; }
+.bubbles i:nth-child(7) { left: 93%; width: 9px; height: 9px; animation-delay: -11s; }
+@keyframes rise { 0% { transform: translate(0, 0) scale(1); opacity: 0; } 10% { opacity: 1; } 70% { opacity: 0.8; transform: translate(20px, -70vh) scale(1); } 85% { transform: translate(25px, -90vh) scale(2); opacity: 0.5; } 100% { transform: translate(30px, -110vh) scale(3); opacity: 0; } }
+
+/* Рыбки: плывут в разные стороны, четные/нечетные перевернуты через scaleX */
+.fishlayer { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.fishlayer img { position: absolute; left: 0; top: 0; width: var(--w, 56px); }
+.fishlayer img:nth-child(odd) { animation: swimRight var(--d, 26s) linear var(--s, 0s) infinite, bob 2.4s ease-in-out infinite; }
+.fishlayer img:nth-child(even) { animation: swimLeft var(--d, 26s) linear var(--s, 0s) infinite, bob 2.4s ease-in-out infinite; }
+@keyframes swimRight { from { transform: translateX(-20vw) scaleX(-1); } to { transform: translateX(120vw) scaleX(-1); } }
+@keyframes swimLeft { from { transform: translateX(120vw) scaleX(1); } to { transform: translateX(-20vw) scaleX(1); } }
+@keyframes bob { 50% { translate: 0 8px; } }
+
+/* Каждой рыбке задаем свою скорость, задержку и размер */
+.fishlayer img:nth-child(1) { top: 6%;  --d: 26s; --s: -4s;  --w: 48px; }
+.fishlayer img:nth-child(2) { top: 13%; --d: 32s; --s: -14s; --w: 44px; }
+.fishlayer img:nth-child(3) { top: 22%; --d: 22s; --s: -9s;  --w: 70px; }
+.fishlayer img:nth-child(4) { top: 31%; --d: 28s; --s: -2s;  --w: 56px; }
+.fishlayer img:nth-child(5) { top: 40%; --d: 36s; --s: -20s; --w: 40px; }
+.fishlayer img:nth-child(6) { top: 49%; --d: 24s; --s: -7s;  --w: 64px; }
+.fishlayer img:nth-child(7) { top: 58%; --d: 30s; --s: -12s; --w: 56px; }
+.fishlayer img:nth-child(8) { top: 67%; --d: 34s; --s: -25s; --w: 48px; }
+.fishlayer img:nth-child(9) { top: 76%; --d: 27s; --s: -17s; --w: 60px; }
+.fishlayer img:nth-child(10) { top: 85%; --d: 38s; --s: -5s;  --w: 42px; }
+
+/* Базовые настройки контента */
+main { position: relative; z-index: 2; padding: 40px 5% 0; }
+section { max-width: 980px; margin: 0 auto 64px; }
+section > h2 { color: #fff; font-size: clamp(1.5rem, 5vw, 2.2rem); text-shadow: 0 2px 12px rgba(0, 30, 50, 0.5); }
+section > p.lead { color: #eafaff; max-width: 52ch; }
+/* Плашка "Глубина" берет значение из атрибута data-depth в HTML */
+section::before { content: "Глубина " attr(data-depth); display: inline-block; margin-bottom: 10px; padding: 2px 12px; border-radius: 999px; font: 700 0.8rem var(--body); color: #06304a; background: var(--gold); }
+
+/* Белые блоки, на которых лежит текст */
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 24px 26px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+/* Сетка для карточек рейсов и отзывов */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.card { position: relative; overflow: hidden; border-radius: 22px; transition: transform 0.3s, box-shadow 0.3s; background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0, 20, 40, 0.4); }
+.card img.card-img { width: 100%; height: 160px; object-fit: cover; border-radius: 22px 22px 0 0; margin: 0; }
+.card .card-content { padding: 20px; }
+.card h3 { font-size: 1.2rem; color: #0b5a7e; margin-bottom: 10px; }
+.card p { font-size: 0.95rem; color: #444; margin: 0 0 15px; }
+.card .price { font: 700 1.3rem var(--head); color: var(--deep); margin: 0; }
+/* Декоративный якорь в углу карточки */
+.card::after { content: "⚓"; position: absolute; right: -10px; bottom: -20px; font-size: 100px; opacity: 0.05; transform: rotate(-15deg); pointer-events: none; }
+
+/* Разные цвета теплоходов на странице Флота */
+.ship-icon { margin: 0 auto; padding: 20px; }
+.card:nth-child(1) .ship-icon { filter: hue-rotate(0deg); }
+.card:nth-child(2) .ship-icon { filter: hue-rotate(160deg); }
+.card:nth-child(3) .ship-icon { filter: hue-rotate(60deg); }
+
+/* Карточки отзывов */
+blockquote { margin: 0; position: relative; overflow: hidden; border-radius: 22px; background: #fff; padding: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+blockquote .review-img { width: 100%; height: 220px; object-fit: cover; margin: 0; border-radius: 22px 22px 0 0; }
+blockquote .review-content { padding: 20px; font-style: italic; color: #333; }
+blockquote footer { margin-top: 15px; font-style: normal; font-weight: 700; color: #0b5a7e; display: flex; align-items: center; gap: 10px; }
+blockquote footer::before { content: "👤"; background: #e0f2fe; border-radius: 50%; width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; }
+blockquote::before { content: "“"; position: absolute; left: 15px; top: 110px; font-size: 80px; color: rgba(11, 90, 126, 0.1); font-family: serif; pointer-events: none; }
+
+/* Нумерованные шаги */
+.steps { counter-reset: step; list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.steps li { counter-increment: step; position: relative; padding-left: 52px; display: flex; align-items: center; min-height: 38px; }
+.steps li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 38px; height: 38px; border-radius: 50%; background: var(--coral); color: #fff; font: 700 1.1rem var(--head); display: flex; align-items: center; justify-content: center; }
+
+/* Выпадающие ответы на вопросы (FAQ) */
+details { border-bottom: 1px solid var(--line); padding: 10px 0; transition: all 0.3s ease; }
+summary { cursor: pointer; font-weight: 700; color: #0b5a7e; transition: color 0.2s; }
+details[open] summary { color: var(--coral); }
+details p { margin: 8px 0 0; color: #444; }
+
+/* Таблица с расписанием */
+.tablewrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 520px; background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+th, td { text-align: left; padding: 12px 15px; border-bottom: 1px solid var(--line); }
+tbody tr:nth-child(even) { background: #f8fbff; }
+tbody tr:hover { background: #e6f4ff; }
+th { font-family: var(--head); background: var(--deep); color: #fff; }
+
+/* Форма бронирования */
+form { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+label { display: grid; gap: 4px; font-weight: 600; color: var(--deep); }
+select, input { font: inherit; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--line); background: #f8fbff; color: var(--ink); transition: border-color 0.2s, background 0.2s; }
+select:focus, input:focus { background: #fff; outline: 2px solid var(--gold); border-color: transparent; }
+input:invalid:not(:placeholder-shown) { border-color: var(--coral); }
+form .btn { align-self: end; background: var(--deep); }
+
+/* Подвал (дно моря с песком) */
+.seabed { position: relative; z-index: 2; margin-top: 30px; padding: 50px 5% 170px; color: #eafaff; overflow: hidden; background: linear-gradient(#073a58 0%, #021a2b 40%, #a58a4f 40.2%, #d8bd7c 100%); }
+.seabed .panel { max-width: 980px; margin: 0 auto 20px; background: rgba(3, 22, 34, 0.8); color: #eafaff; border-color: rgba(255, 255, 255, 0.1); }
+.seabed a { color: var(--gold); font-weight: 700; }
+.sand { position: absolute; left: 0; right: 0; bottom: 0; height: 160px; }
+.sand img { position: absolute; }
+/* Водоросли качаются */
+.weed { bottom: 0; transform-origin: 50% 100%; animation: sway 4s ease-in-out infinite; }
+.w1 { left: 3%; height: 130px; }
+.w2 { left: 8%; height: 100px; animation-delay: -1.3s; }
+.w3 { left: 44%; height: 90px; animation-delay: -2.1s; }
+.w4 { right: 8%; height: 120px; animation-delay: -0.7s; }
+.w5 { right: 3%; height: 140px; animation-delay: -2.6s; }
+@keyframes sway { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
+.shell { bottom: 14px; }
+.s1 { left: 22%; width: 62px; } .s2 { left: 66%; width: 48px; } .s3 { left: 80%; width: 40px; }
+/* Черепаха ползет */
+.turtle { bottom: 34px; left: 0; width: 110px; animation: crawl 38s linear infinite, bob 3s ease-in-out infinite; }
+@keyframes crawl { from { transform: translateX(-130px); } to { transform: translateX(100vw); } }
+
+/* Стили для страницы Партнеры */
+.partner-icon { height: 150px; display: grid; place-items: center; font-size: 68px; background: linear-gradient(135deg, #ffd6a5, #ff9d6c); }
+.partner-icon.bank { background: linear-gradient(135deg, #6cc4f5, #0b5a7e); }
+.partner-icon.river { background: linear-gradient(135deg, #4fc3e0, #06304a); }
+.partner-icon span { animation: bob 3s ease-in-out infinite; }
+.card .card-content .btn { margin-top: 4px; color: #fff; }
+.card .card-content .btn.gold { color: #06304a; }
+.links { margin: 0; padding-left: 1.2em; }
+.links li { margin-bottom: 6px; }
+.links a { color: #0b5a7e; font-weight: 700; text-decoration: underline; word-break: break-all; }
+/* Картинки в карточках партнеров */
+.partner-image { width: 100%; height: 180px; object-fit: cover; display: block; border-radius: 22px 22px 0 0; }
+.card { display: flex; flex-direction: column; }
+.card .card-content { display: flex; flex-direction: column; flex-grow: 1; }
+.card .card-content .btn { margin-top: auto; align-self: flex-start; }
+
+/* Стили страницы "Обо мне" (Закат и Япония) */
+.sky.sunset { height: 420px; min-height: 420px; animation: none; --sky-top: #1c2a78; --sky-mid: #5b3a9a; --sky-bot: #f58ea6; }
+.sky.sunset .sun { animation: none; top: auto; bottom: 90px; right: 20%; width: 100px; height: 100px; background: radial-gradient(circle, #fff2b0 30%, #ffa95a 72%); box-shadow: 0 0 90px 36px rgba(255, 150, 90, 0.55); }
+.sky.sunset::after { animation: none; opacity: 0; }
+.sky.sunset .stars { inset: 0 0 45% 0; opacity: 0.8; animation: twinkle 2s ease-in-out infinite alternate; }
+.sky.sunset .cloud { animation: cloud 70s linear infinite; filter: sepia(0.5) hue-rotate(290deg) brightness(0.95); }
+.sky.sunset .cloud.c2 { animation-duration: 95s; animation-delay: -40s; }
+.sky.sunset .gull { animation-name: gullFly, gullBob; }
+.sky.sunset .gull.g2, .sky.sunset .gull.g4 { animation-name: gullFlyBack, gullBob; }
+
+/* Корабли на закате */
+.fleet-ship { position: absolute; z-index: 4; left: var(--l); bottom: var(--b); width: min(var(--w), 42vw); animation: shipDrift var(--dd, 16s) ease-in-out infinite alternate; }
+.fleet-ship img { display: block; width: 100%; transform-origin: 50% 90%; animation: rock 3.4s ease-in-out infinite; animation-delay: var(--rd, 0s); filter: hue-rotate(var(--h, 0deg)) saturate(0.95); }
+.fs1 { --l: 5%;  --b: -14px; --w: 250px; --h: 180deg; --dd: 18s; }
+.fs2 { --l: 42%; --b: 6px;   --w: 180px; --h: 40deg;  --dd: 14s; --rd: -1s; }
+.fs3 { --l: 74%; --b: 18px;  --w: 125px; --h: 320deg; --dd: 11s; --rd: -2s; }
+@keyframes shipDrift { from { translate: -26px 0; } to { translate: 26px 0; } }
+
+/* Дым из трубы */
+.ship::before, .ship::after, .fleet-ship::before, .fleet-ship::after {
+  content: ""; position: absolute; left: 49.5%; top: -2%; width: 8%; aspect-ratio: 1; border-radius: 50%; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,255,255,0.45) 60%, transparent 70%);
+  animation: smoke 4s ease-out infinite;
+}
+.ship::after, .fleet-ship::after { animation-delay: -2s; }
+@keyframes smoke {
+  0% { transform: translate(0, 0) scale(0.4); opacity: 0.85; }
+  100% { transform: translate(55%, -420%) scale(2.6); opacity: 0; }
+}
+
+/* Берег */
+.land { position: relative; background: linear-gradient(#2a1d52, #3b2a66 45%, #2a1d4a); }
+.land section::before { display: none; }
+.about-main { position: relative; z-index: 30; }
+.land-page .seabed { background: linear-gradient(#2a1d4a, #3b2a66 40%, #d8bd7c 40.2%, #c9a96a); }
+.land-page .weed { display: none; }
+
+/* Скрытые чекбоксы для переключения погоды (без JS) */
+.toggle { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.scene-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
+.ctl { display: inline-block; cursor: pointer; padding: 8px 18px; border-radius: 999px; font-weight: 700; color: #06304a; background: rgba(255,255,255,0.9); border: 2px solid transparent; transition: background-color 0.3s, color 0.3s, transform 0.2s; user-select: none; }
+.ctl:hover { transform: translateY(-2px); }
+
+/* Смена текста и цвета кнопок при клике */
+.ctl-day { background: #1b2340; color: #fff; }
+.ctl-day .s-day { display: none; }
+#t-day:checked ~ .window-section .ctl-day { background: var(--gold); color: #06304a; }
+#t-day:checked ~ .window-section .ctl-day .s-night { display: none; }
+#t-day:checked ~ .window-section .ctl-day .s-day { display: inline; }
+
+.ctl-wind .s-wind { display: none; }
+#t-wind:checked ~ .window-section .ctl-wind { background: #cfe8ff; }
+#t-wind:checked ~ .window-section .ctl-wind .s-calm { display: none; }
+#t-wind:checked ~ .window-section .ctl-wind .s-wind { display: inline; }
+
+.wl { display: none; }
+.wl-clear { background: #fff2b8; } .wl-rain { background: #a9c0e0; } .wl-snow { background: #f0f8ff; }
+#w-clear:checked ~ .window-section .wl-clear,
+#w-rain:checked ~ .window-section .wl-rain,
+#w-snow:checked ~ .window-section .wl-snow { display: inline-block; }
+
+#t-day:focus-visible ~ .window-section .ctl-day, #t-wind:focus-visible ~ .window-section .ctl-wind,
+#w-clear:focus-visible ~ .window-section .wl-clear, #w-rain:focus-visible ~ .window-section .wl-rain,
+#w-snow:focus-visible ~ .window-section .wl-snow, #t-book:focus-visible ~ .terrace .book { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+/* Окно (стена, рама, подоконник) */
+.stage { --wall: #5a3f7a; position: relative; padding: 34px 34px 20px; border-radius: 18px; background-color: var(--wall); background-image: repeating-linear-gradient(180deg, transparent 0 34px, rgba(0,0,0,0.18) 34px 36px); box-shadow: 0 16px 40px rgba(0,0,0,0.45); transition: background-color 1.5s; }
+#t-day:checked ~ .window-section .stage { --wall: #8a6fb5; }
+
+.frame { --fw: 12px; --fc: #8a5a35; position: relative; padding: var(--fw); border-radius: 14px; background-color: var(--fc);
+  box-shadow: inset 0 0 0 3px rgba(0,0,0,0.22), inset 0 3px 0 rgba(255,255,255,0.25), 0 8px 18px rgba(0,0,0,0.45);
+  transition: padding 0.8s ease, background-color 0.8s ease; }
+#w-rain:checked ~ .window-section .frame { --fw: 15px; --fc: #46506a; }
+#w-snow:checked ~ .window-section .frame { --fw: 24px; --fc: #e9eff7; }
+.frame::after { content: ""; position: absolute; inset: var(--fw); border-radius: 8px; pointer-events: none; z-index: 20; background: linear-gradient(115deg, rgba(255,255,255,0.2) 0 16%, transparent 16% 100%); transition: inset 0.8s ease; }
+.frame::before { content: ""; position: absolute; left: -8px; right: -8px; top: -16px; height: 26px; border-radius: 20px 20px 6px 6px; background: #fff; box-shadow: 0 3px 0 #dbe6f2; transform: scaleY(0); transform-origin: 50% 100%; transition: transform 0.9s ease; z-index: 21; }
+#w-snow:checked ~ .window-section .frame::before { transform: scaleY(1); }
+.sill { position: relative; height: 18px; margin: -2px -14px 0; border-radius: 6px; background: #6b4a2e; box-shadow: 0 6px 12px rgba(0,0,0,0.4); transition: background-color 0.8s; }
+#w-rain:checked ~ .window-section .sill { background: #3b4256; }
+.sill::before { content: ""; position: absolute; left: 4%; right: 4%; top: -22px; height: 28px; transform: scaleY(0); transform-origin: 50% 100%; transition: transform 1s ease;
+  background: radial-gradient(48px 24px at 10% 100%, #fff 96%, transparent), radial-gradient(70px 30px at 38% 100%, #fff 96%, transparent), radial-gradient(54px 24px at 66% 100%, #fff 96%, transparent), radial-gradient(60px 28px at 92% 100%, #fff 96%, transparent); }
+#w-snow:checked ~ .window-section .sill::before { transform: scaleY(1); }
+
+/* Сцена в окне (Япония). @property для плавной смены цветов */
+@property --sc1 { syntax: "<color>"; inherits: true; initial-value: #0b1030; }
+@property --sc2 { syntax: "<color>"; inherits: true; initial-value: #2a1b4d; }
+@property --sc3 { syntax: "<color>"; inherits: true; initial-value: #7a3d6e; }
+@property --g1 { syntax: "<color>"; inherits: true; initial-value: #2b2540; }
+@property --g2 { syntax: "<color>"; inherits: true; initial-value: #120e1d; }
+
+.scene {
+  --hb: #1c1633; --hr: #2c2250; --win: #ffd27a; --winglow: rgba(255,210,122,0.55); --frame: #0e0a1c;
+  --fuji: #3a3f7a; --hill: #1f1a45; --orb: #f6f2e4; --orbg: rgba(255,255,255,0.35); --glow: rgba(255,120,80,0.65); --crown: 0.7; --path: #4a4366;
+  --la: 4deg; --ls: 4s; --ts: 1.5deg; --cs: 6s; --pw: 22px; --psd: 3s; --skew: -12deg; --sf: 8deg; --sfd: 1.3s; --ut: 3deg;
+  --sc1: #0b1030; --sc2: #2a1b4d; --sc3: #7a3d6e; --g1: #2b2540; --g2: #120e1d;
+  position: relative; height: 460px; overflow: hidden; isolation: isolate; border-radius: 8px;
+  background: linear-gradient(180deg, var(--sc1), var(--sc2) 55%, var(--sc3));
+  transition: --sc1 1.5s, --sc2 1.5s, --sc3 1.5s, --g1 1.5s, --g2 1.5s;
+}
+#t-day:checked ~ .window-section .scene {
+  --sc1: #7fc8f8; --sc2: #cfe8ff; --sc3: #ffe6d5; --g1: #9a93a8; --g2: #6d6679;
+  --hb: #9b7f8e; --hr: #6b4a4a; --win: #bcd3e3; --winglow: rgba(0,0,0,0); --frame: #5a4a52;
+  --fuji: #6f79b8; --hill: #7fae7a; --orb: #ffe27a; --orbg: rgba(255,235,150,0.7); --glow: rgba(255,120,80,0); --crown: 1; --path: #d8c9a8;
+}
+#w-rain:checked ~ .window-section .scene { --la: 8deg; --ls: 2.6s; --ts: 2.2deg; --cs: 4.5s; --psd: 2.4s; }
+#w-snow:checked ~ .window-section .scene { --hr: #eef3fa; --hill: #aab6d0; --path: #e8eef5; --la: 6deg; --ls: 3.2s; --ts: 1.8deg; --cs: 5s; }
+#t-wind:checked ~ .window-section .scene { --la: 16deg; --ls: 1.1s; --ts: 4deg; --cs: 2.6s; --pw: 90px; --psd: 1.4s; --skew: -28deg; --sf: 26deg; --sfd: 0.45s; --ut: 12deg; }
+
+/* Звезды, луна, горы, дома */
+.night-stars { position: absolute; inset: 0 0 40% 0; z-index: 1; opacity: 1; transition: opacity 1.5s; animation: twinkle 2s ease-in-out infinite alternate;
+  background-image: radial-gradient(2px 2px at 8% 14%, #fff, transparent), radial-gradient(2px 2px at 20% 40%, #fff, transparent), radial-gradient(1px 1px at 33% 12%, #fff, transparent), radial-gradient(2px 2px at 46% 30%, #fff, transparent), radial-gradient(1px 1px at 58% 10%, #fff, transparent), radial-gradient(2px 2px at 70% 36%, #fff, transparent), radial-gradient(1px 1px at 82% 16%, #fff, transparent), radial-gradient(2px 2px at 92% 44%, #fff, transparent), radial-gradient(1px 1px at 14% 62%, #fff, transparent), radial-gradient(1px 1px at 64% 58%, #fff, transparent); }
+#t-day:checked ~ .window-section .night-stars { opacity: 0; }
+.orb { position: absolute; z-index: 1; top: 36px; right: 14%; width: 56px; height: 56px; border-radius: 50%; background: var(--orb); box-shadow: 0 0 50px 14px var(--orbg); transition: background-color 1.5s, box-shadow 1.5s; }
+
+.fuji { position: absolute; z-index: 1; left: 30%; bottom: 170px; width: 380px; height: 190px; clip-path: polygon(50% 0, 100% 100%, 0 100%); background: var(--fuji); transition: background-color 1.5s; }
+.fuji::after { content: ""; position: absolute; inset: 0; background: linear-gradient(#f2f4ff 0 22%, transparent 22%); }
+.hills { position: absolute; z-index: 1; left: -10%; width: 120%; bottom: 90px; height: 130px; border-radius: 50% 50% 0 0 / 100% 100% 0 0; background: var(--hill); transition: background-color 1.5s; }
+
+.house { position: absolute; z-index: 2; bottom: 90px; background: var(--hb); transition: background-color 1.5s; }
+.house::before { content: ""; position: absolute; left: -8%; right: -8%; top: -28px; height: 30px; background: var(--hr); clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%); transition: background-color 1.5s; }
+.house i { position: absolute; width: 24%; height: 26px; background-color: var(--win); background-image: linear-gradient(135deg, rgba(255,255,255,0.4) 0 26%, transparent 26%); border: 2px solid var(--frame); box-shadow: 0 4px 0 -1px var(--frame), 0 0 14px var(--winglow); transition: background-color 1.5s, box-shadow 1.5s, border-color 1.5s; }
+.house i::before, .house i::after { content: ""; position: absolute; background: var(--frame); transition: background-color 1.5s; }
+.house i::before { left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; }
+.house i::after { top: 50%; left: 0; right: 0; height: 2px; margin-top: -1px; }
+.house i:nth-child(1) { left: 14%; top: 18px; } .house i:nth-child(2) { left: 62%; top: 18px; }
+.house i:nth-child(3) { left: 14%; top: 64px; } .house i:nth-child(4) { left: 62%; top: 64px; }
+.h1 { left: 14%; width: 130px; height: 120px; }
+.h2 { left: 27%; width: 112px; height: 150px; }
+.h3 { left: 62%; width: 122px; height: 130px; }
+.h4 { left: 75%; width: 130px; height: 160px; }
+.h5 { left: 89%; width: 100px; height: 120px; }
+
+.torii { position: absolute; z-index: 2; left: 46%; bottom: 90px; width: 130px; height: 120px; }
+.torii i { position: absolute; background: #c8342b; }
+.torii .kasagi { left: -12px; right: -12px; top: 0; height: 12px; border-radius: 4px 4px 0 0; background: #2a1d24; transform: perspective(40px) rotateX(-8deg); }
+.torii .nuki { left: 6px; right: 6px; top: 30px; height: 8px; }
+.torii .pl, .torii .pr { top: 8px; bottom: 0; width: 10px; }
+.torii .pl { left: 14px; } .torii .pr { right: 14px; }
+
+/* Фонарики качаются с разной задержкой */
+.lanterns { position: absolute; z-index: 3; left: 6%; right: 6%; top: 150px; height: 40px; }
+.lanterns::before { content: ""; position: absolute; left: 0; right: 0; top: 0; border-top: 2px solid rgba(0,0,0,0.55); }
+.lanterns i { position: absolute; top: 2px; width: 18px; height: 24px; border-radius: 9px; background: #e63946; box-shadow: 0 0 18px 6px var(--glow); transform-origin: 50% -4px; animation: lanternSway var(--ls) ease-in-out infinite alternate; transition: box-shadow 1.5s; }
+@keyframes lanternSway { from { transform: rotate(calc(var(--la) * -1)); } to { transform: rotate(var(--la)); } }
+.lanterns i:nth-child(1) { left: 10%; animation-delay: -0.0s; }
+.lanterns i:nth-child(2) { left: 20%; animation-delay: -0.7s; }
+.lanterns i:nth-child(3) { left: 30%; animation-delay: -1.4s; }
+.lanterns i:nth-child(4) { left: 40%; animation-delay: -2.1s; }
+.lanterns i:nth-child(5) { left: 50%; animation-delay: -2.8s; }
+.lanterns i:nth-child(6) { left: 60%; animation-delay: -3.5s; }
+.lanterns i:nth-child(7) { left: 70%; animation-delay: -4.2s; }
+.lanterns i:nth-child(8) { left: 80%; animation-delay: -4.9s; }
+.lanterns i:nth-child(9) { left: 90%; animation-delay: -5.6s; }
+
+/* Деревья сакуры */
+.tree { position: absolute; z-index: 4; bottom: 70px; width: 230px; height: 310px; }
+.tree::before { content: ""; position: absolute; left: 50%; bottom: 0; width: 24px; height: 180px; margin-left: -12px; background: #4a2e2a; border-radius: 8px 8px 4px 4px; transform: rotate(3deg); }
+.t-left { left: -30px; } .t-right { right: -30px; transform: scaleX(-1); }
+.crown { position: absolute; left: 0; right: 0; top: 0; height: 200px; transform-origin: 50% 100%;
+  background: radial-gradient(circle at 28% 56%, #ffc2d1 0 33%, transparent 34%), radial-gradient(circle at 52% 34%, #ff9fba 0 37%, transparent 38%), radial-gradient(circle at 76% 58%, #ffc2d1 0 32%, transparent 33%), radial-gradient(circle at 50% 72%, #ffadc6 0 30%, transparent 31%), radial-gradient(circle at 16% 36%, #ffd5e0 0 20%, transparent 21%);
+  filter: brightness(var(--crown)); transition: filter 1.5s; animation: crownSway var(--cs) ease-in-out infinite alternate; }
+@keyframes crownSway { from { transform: rotate(calc(var(--ts) * -1)); } to { transform: rotate(var(--ts)); } }
+
+/* Земля, лужи, сугробы */
+.ground { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; height: 90px; background: linear-gradient(180deg, var(--g1), var(--g2)); }
+.path { position: absolute; z-index: 3; left: calc(46% - 20px); bottom: 0; width: 170px; height: 120px; clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%); background: var(--path); transition: background-color 1.5s; }
+.puddle { position: absolute; width: 90px; height: 14px; border-radius: 50%; background: rgba(150,180,230,0.35); opacity: 0; transition: opacity 1s; }
+.puddle::before, .puddle::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(255,255,255,0.7); border-radius: 50%; opacity: 0; animation: ripple 1.6s ease-out infinite; }
+.puddle::after { animation-delay: -0.8s; }
+.p1 { left: 18%; bottom: 14px; } .p2 { left: 52%; bottom: 40px; width: 70px; } .p3 { left: 80%; bottom: 18px; }
+#w-rain:checked ~ .window-section .puddle { opacity: 1; }
+@keyframes ripple { 0% { transform: scale(0.2); opacity: 0.9; } 100% { transform: scale(1.2); opacity: 0; } }
+.drifts { position: absolute; z-index: 4; left: 0; right: 0; bottom: 0; height: 50px; transform: translateY(100%); transition: transform 1.2s ease;
+  background: radial-gradient(70px 30px at 6% 100%, #fff 96%, transparent), radial-gradient(110px 40px at 28% 100%, #fff 96%, transparent), radial-gradient(80px 30px at 52% 100%, #fff 96%, transparent), radial-gradient(120px 42px at 76% 100%, #fff 96%, transparent), radial-gradient(70px 30px at 96% 100%, #fff 96%, transparent); }
+#w-snow:checked ~ .window-section .drifts { transform: translateY(0); }
+
+/* Котенок: лапы, хвост, шарф */
+.kitten { position: absolute; z-index: 5; bottom: 18px; left: -22%; width: 150px; animation: walk 26s linear infinite; }
+.kitten svg { display: block; animation: kbob 0.4s ease-in-out infinite alternate; }
+@keyframes walk { from { left: -22%; } to { left: 104%; } }
+@keyframes kbob { to { transform: translateY(-3px); } }
+.leg { transform-box: fill-box; transform-origin: 50% 0; animation: step 0.8s ease-in-out infinite; }
+.leg.rb, .leg.lf { animation-delay: -0.4s; }
+@keyframes step { 0%, 100% { transform: rotate(-24deg); } 50% { transform: rotate(24deg); } }
+.tail { transform-box: fill-box; transform-origin: 100% 100%; animation: wag 1.6s ease-in-out infinite alternate; }
+@keyframes wag { from { transform: rotate(-8deg); } to { transform: rotate(10deg); } }
+.umbrella { opacity: 0; transition: opacity 0.6s; animation: umbrellaSway 2s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+#w-rain:checked ~ .window-section .umbrella { opacity: 1; }
+@keyframes umbrellaSway { from { transform: rotate(calc(var(--ut) * -1)); } to { transform: rotate(var(--ut)); } }
+.scarf { opacity: 0; transition: opacity 0.6s; }
+#w-snow:checked ~ .window-section .scarf { opacity: 1; }
+.scarf-tail { transform-box: fill-box; transform-origin: 100% 0%; animation: scarfFlap var(--sfd) ease-in-out infinite alternate; }
+@keyframes scarfFlap { from { transform: rotate(calc(var(--sf) * -1)); } to { transform: rotate(var(--sf)); } }
+
+/* Лепестки сакуры */
+.petals { position: absolute; inset: 0; z-index: 6; pointer-events: none; overflow: hidden; }
+.petals i { position: absolute; top: -20px; width: 10px; height: 7px; background: #ffb7c5; border-radius: 80% 0 80% 0; animation: petalFall var(--d, 15s) linear var(--s, 0s) infinite, petalSway var(--psd) ease-in-out infinite alternate; }
+.petals i:nth-child(3n) { width: 13px; height: 9px; background: #ffc9d6; }
+@keyframes petalFall { from { transform: translateY(-20px) rotate(0deg); } to { transform: translateY(490px) rotate(360deg); } }
+@keyframes petalSway { from { translate: calc(var(--pw) * -1) 0; } to { translate: var(--pw) 0; } }
+.petals i:nth-child(1) { left: 4%; --d: 13s; --s: -0.0s; }
+.petals i:nth-child(2) { left: 9%; --d: 16s; --s: -2.3s; }
+.petals i:nth-child(3) { left: 15%; --d: 19s; --s: -4.6s; }
+.petals i:nth-child(4) { left: 22%; --d: 14s; --s: -6.9s; }
+.petals i:nth-child(5) { left: 28%; --d: 17s; --s: -9.2s; }
+.petals i:nth-child(6) { left: 36%; --d: 20s; --s: -11.5s; }
+.petals i:nth-child(7) { left: 44%; --d: 15s; --s: -13.8s; }
+.petals i:nth-child(8) { left: 52%; --d: 18s; --s: -16.1s; }
+.petals i:nth-child(9) { left: 60%; --d: 13s; --s: -18.4s; }
+.petals i:nth-child(10) { left: 68%; --d: 16s; --s: -20.7s; }
+.petals i:nth-child(11) { left: 75%; --d: 19s; --s: -23.0s; }
+.petals i:nth-child(12) { left: 82%; --d: 14s; --s: -25.3s; }
+.petals i:nth-child(13) { left: 89%; --d: 17s; --s: -27.6s; }
+.petals i:nth-child(14) { left: 95%; --d: 20s; --s: -29.9s; }
+
+/* Погодные эффекты: дождь, снег, ветер */
+.shade { position: absolute; inset: 0; z-index: 7; background: rgba(40,50,70,0.5); opacity: 0; transition: opacity 1s, background-color 1s; pointer-events: none; }
+#w-rain:checked ~ .window-section .shade { opacity: 0.35; }
+#w-snow:checked ~ .window-section .shade { background: rgba(225,235,250,0.5); opacity: 0.3; }
+.rain { position: absolute; inset: 0 -15%; z-index: 8; pointer-events: none; opacity: 0; transition: opacity 1s, transform 1s; transform: skewX(var(--skew));
+  background-image: radial-gradient(2px 16px at 50% 30%, rgba(210,225,255,0.6), transparent), radial-gradient(2px 11px at 40% 60%, rgba(210,225,255,0.4), transparent), radial-gradient(2px 20px at 60% 40%, rgba(210,225,255,0.5), transparent);
+  background-size: 37px 90px, 53px 140px, 29px 70px; animation: rainFall 0.7s linear infinite; }
+#w-rain:checked ~ .window-section .rain { opacity: 1; }
+@keyframes rainFall { to { background-position: 0 90px, 0 140px, 0 70px; } }
+.snow { position: absolute; inset: 0 -15%; z-index: 8; pointer-events: none; opacity: 0; transition: opacity 1s, transform 1s; transform: skewX(calc(var(--skew) * 0.6));
+  background-image: radial-gradient(3px 3px at 20% 30%, #fff 0 55%, transparent 100%), radial-gradient(2px 2px at 70% 60%, rgba(255,255,255,0.9) 0 55%, transparent 100%), radial-gradient(4px 4px at 45% 80%, rgba(255,255,255,0.95) 0 55%, transparent 100%);
+  background-size: 97px 120px, 61px 160px, 131px 90px; animation: snowFall 2.6s linear infinite, snowSway 3s ease-in-out infinite alternate; }
+#w-snow:checked ~ .window-section .snow { opacity: 1; }
+@keyframes snowFall { to { background-position: 0 120px, 0 160px, 0 90px; } }
+@keyframes snowSway { from { translate: -14px 0; } to { translate: 14px 0; } }
+.gusts { position: absolute; inset: 0; z-index: 9; pointer-events: none; opacity: 0; transition: opacity 0.6s; }
+#t-wind:checked ~ .window-section .gusts { opacity: 1; }
+.gusts i { position: absolute; left: -30%; width: 26%; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.75), transparent); animation: gust 2s linear infinite; }
+.gusts i:nth-child(1) { top: 22%; } .gusts i:nth-child(2) { top: 44%; animation-delay: -0.7s; } .gusts i:nth-child(3) { top: 63%; animation-delay: -1.3s; animation-duration: 2.4s; }
+@keyframes gust { to { left: 110%; } }
+
+/* Блоки с текстом на странице "Обо мне" */
+.about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.about-grid h3 { color: #0b5a7e; }
+.how { margin: 0; padding-left: 1.2em; }
+.how li { margin-bottom: 6px; }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.chips li { padding: 4px 14px; border-radius: 999px; background: #e0f2fe; color: #0b5a7e; font-weight: 700; font-size: 0.9rem; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.btn.github { background: #24292f; } .btn.github:hover { background: #3a4048; }
+
+/* Столик с коктейлем и книгой */
+.terrace-panel { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; background: rgba(40,28,80,0.72); color: #eafaff; border-color: rgba(255,255,255,0.2); }
+.terrace-text { flex: 1 1 260px; }
+.hint { font-weight: 700; color: var(--gold); animation: hintPulse 1.8s ease-in-out infinite; }
+@keyframes hintPulse { 50% { opacity: 0.45; } }
+.table-scene { position: relative; flex: 0 0 auto; width: 300px; height: 260px; margin: 0 auto; }
+.table-scene .table { position: absolute; inset: 0; width: 100%; height: 100%; }
+.book { position: absolute; left: 34px; top: 96px; width: 124px; height: 84px; display: grid; place-items: center; text-align: center; cursor: pointer; color: #fff; font: 700 0.95rem/1.15 var(--head);
+  border-radius: 4px 8px 8px 4px; background: linear-gradient(135deg, #6d4bd1, #a34fd6);
+  box-shadow: -4px 4px 0 #4c35a3, -8px 8px 0 #f1e6ff, -9px 9px 0 #c9b8e8, 0 14px 14px rgba(0,0,0,0.4);
+  transform: perspective(320px) rotateX(38deg) rotateZ(-8deg); transform-origin: 50% 100%; transition: transform 0.3s; }
+.book:hover { transform: perspective(320px) rotateX(30deg) rotateZ(-8deg) translateY(-8px); }
+.liquid { transform-box: fill-box; transform-origin: 50% 100%; animation: slosh 1.3s ease-in-out infinite alternate; }
+@keyframes slosh { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
+.stir { transform-box: fill-box; transform-origin: 50% 100%; animation: stir 1.1s ease-in-out infinite alternate; }
+@keyframes stir { from { transform: rotate(-10deg) translateX(-2px); } to { transform: rotate(10deg) translateX(2px); } }
+.ice { transform-box: fill-box; transform-origin: center; animation: iceBob 1.6s ease-in-out infinite alternate; }
+.ice.i2 { animation-delay: -0.8s; }
+@keyframes iceBob { from { transform: translateY(-2px) rotate(-8deg); } to { transform: translateY(3px) rotate(10deg); } }
+.cbub { animation: cbub 2.2s ease-in infinite; }
+.cbub.b2 { animation-delay: -0.7s; } .cbub.b3 { animation-delay: -1.4s; }
+@keyframes cbub { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 0.9; } 100% { transform: translateY(-34px); opacity: 0; } }
+.tail-top { transform-box: fill-box; transform-origin: 100% 100%; animation: tailFlapTop var(--sfd) ease-in-out infinite alternate; }
+.tail-bottom { transform-box: fill-box; transform-origin: 100% 0%; animation: tailFlapBottom var(--sfd) ease-in-out infinite alternate; }
+@keyframes tailFlapTop { from { transform: rotate(calc(var(--sf) * -1)); } to { transform: rotate(calc(var(--sf) * 1.5)); } }
+@keyframes tailFlapBottom { from { transform: rotate(calc(var(--sf) * 1.5)); } to { transform: rotate(calc(var(--sf) * -1)); } }
+
+/* Модальное окно для книги */
+.modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 20px; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+#t-book:checked ~ .modal { opacity: 1; visibility: visible; }
+.modal-bg { position: absolute; inset: 0; background: rgba(10,5,30,0.65); cursor: pointer; }
+.modal-box { position: relative; max-width: 460px; padding: 28px; border-radius: 22px; background: #fff; color: var(--ink); box-shadow: 0 20px 60px rgba(0,0,0,0.5); transform: translateY(20px) scale(0.96); transition: transform 0.3s; }
+#t-book:checked ~ .modal .modal-box { transform: none; }
+.modal-close { display: inline-block; margin-top: 18px; padding: 8px 20px; border-radius: 999px; background: #e0f2fe; color: #0b5a7e; font-weight: 700; cursor: pointer; }
+
+/* Адаптив под мобилки */
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  .sun { width: 60px; height: 60px; }
+  .panel { padding: 18px; }
+  .sea::after { display: none; }
+  .scene { height: 400px; }
+  .h1, .h4 { display: none; } /* Скрываем часть домиков, чтоб не было каши */
+  .card img.card-img, blockquote .review-img { height: 140px; }
+}
+
+/* Отключаем анимации для тех, у кого настройки спецвозможностей */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .ship { left: 50%; transform: translateX(-50%); }
+  .fishlayer img { left: 50%; transform: translateX(-50%); }
+  .turtle { left: 50%; transform: translateX(-50%); }
+  .gull { left: var(--x); }
+  .kitten { left: 40%; }
+  .petals i { top: 20%; }
+  .petals i:nth-child(even) { top: 55%; }
+}

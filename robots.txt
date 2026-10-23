@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: http://volna.l9137573.beget.tech/volna/sitemap.xml
